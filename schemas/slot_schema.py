@@ -1,10 +1,10 @@
 from pydantic import BaseModel, Field
-from datetime import date, datetime
+from datetime import date, datetime, time
 from typing import List, Optional
 
 class SlotBase(BaseModel):
-    start: datetime
-    end: datetime
+    start: time
+    end: time
     is_lab_slot: bool
     day: str
     created_at: datetime = Field(default_factory=datetime.now)
