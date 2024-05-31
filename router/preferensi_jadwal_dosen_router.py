@@ -44,3 +44,10 @@ async def update_preferensi_jadwal_dosen(
     session = Depends(get_async_session)
 )->PreferensiJadwalDosenSchema:
     return await updatePreferensiJadwalDosen(id, preferensiJadwalDosen, session)
+
+@router.post("", response_model=PreferensiJadwalDosenSchema)
+async def add_preferensi_jadwal_dosen(
+    preferensiJadwalDosen: PreferensiJadwalDosenCreate,
+    session = Depends(get_async_session)
+)->PreferensiJadwalDosenSchema:
+    return await postPreferensiJadwalDosen(preferensiJadwalDosen, session)
