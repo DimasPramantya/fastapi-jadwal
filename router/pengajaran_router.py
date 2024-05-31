@@ -44,3 +44,10 @@ async def update_pengajaran(
     session = Depends(get_async_session)
 )->PengajaranSchema:
     return await updatePengajaran(id, pengajaran, session)
+
+@router.post("", response_model=PengajaranSchema)
+async def add_pengajaran(
+    pengajaran: PengajaranCreate,
+    session = Depends(get_async_session)
+)->PengajaranSchema:
+    return await addPengajaran(pengajaran, session)

@@ -57,4 +57,18 @@ async def getPengajaranPageable(
 async def getPengajaranCount(session: AsyncSession):
     result = await session.execute(select(func.count(PengajaranModel.id)))
     return result.scalar_one()
-    
+
+async def addPengajaran(
+    pengajaran: PengajaranCreate,
+    session: AsyncSession
+):
+    entity = PengajaranModel(
+        id_dosen = pengajaran.id_dosen,
+        id_kelas = pengajaran.id_kelas,
+        id_mata_kuliah = pengajaran.id_mata_kuliah,
+        id_semester = pengajaran.id_semester
+    )
+    session.add(entity)
+    await session.commit()
+    await session.refresh(entity)
+    return entity
