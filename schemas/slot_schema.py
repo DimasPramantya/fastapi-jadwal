@@ -3,8 +3,8 @@ from datetime import date, datetime, time
 from typing import List, Optional
 
 class SlotBase(BaseModel):
-    start: time
-    end: time
+    start_time: time
+    end_time: time
     is_lab_slot: bool
     day: str
     created_at: datetime = Field(default_factory=datetime.now)
@@ -26,8 +26,8 @@ class Slot(SlotBase):
 def slot_model_to_dict(slot: Slot):
      return {
         "id": slot.id,
-        "start": slot.start,
-        "end": slot.end,
+        "start_time": slot.start_time,
+        "end_time": slot.end_time,
         "day": slot.day,
         "is_lab_slot": slot.is_lab_slot,
         "created_at": slot.created_at,

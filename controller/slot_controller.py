@@ -11,8 +11,8 @@ async def addSlot(
     session: AsyncSession
 ) -> SlotModel:
     newSlot = SlotModel(
-        start = slot.start,
-        end = slot.end,
+        start_time = slot.start_time,
+        end_time = slot.end_time,
         is_lab_slot = slot.is_lab_slot
     )
     session.add(newSlot)
