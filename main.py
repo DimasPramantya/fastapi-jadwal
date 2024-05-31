@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from exceptions.bad_request_exception import BadRequestException
 from exceptions.entity_not_found_exception import EntityNotFoundException, entityNotFoundExceptionHandler
@@ -10,7 +11,9 @@ from router.ruangan_router import router as ruanganRouter
 from router.mata_kuliah_router import router as mataKuliahRouter
 from router.slot_router import router as slotRouter
 from router.preferensi_jadwal_dosen_router import router as preferensiJadwalDosenRouter
+from router.jadwal_router import router as jadwalRouter;
 from exceptions.global_exception import *
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -19,6 +22,15 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods (GET, POST, PUT, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
+
+
 app.include_router(router= dosenRouter, prefix="/api/dosen", tags=["Dosen"])
 app.include_router(router = kelasRouter, prefix="/api/kelas", tags=["Kelas"])
 app.include_router(router = semesterRouter, prefix="/api/semester", tags=["Semester"])
@@ -26,6 +38,7 @@ app.include_router(router=ruanganRouter, prefix="/api/ruangan", tags=["Ruangan"]
 app.include_router(router=mataKuliahRouter, prefix="/api/mata-kuliah", tags=["Mata Kuliah"])
 app.include_router(router=slotRouter, prefix="/api/slot", tags=["Slot"])
 app.include_router(router=preferensiJadwalDosenRouter, prefix="/api/preferensi", tags=["Preferensi Jadwal Dosen"])
+app.include_router(router=jadwalRouter, prefix="/api/jadwal", tags=["Jadwal"])
 
 
 app.add_exception_handler(EntityNotFoundException, entityNotFoundExceptionHandler)
