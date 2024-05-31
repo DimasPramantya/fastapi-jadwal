@@ -12,14 +12,14 @@ async def add_mata_kuliah(
     mataKuliah: MataKuliahCreate,
     session: AsyncSession = Depends(get_async_session)
 ):
-    await createMataKuliah(mataKuliah, session)
+    return await createMataKuliah(mataKuliah, session)
 
 @router.get("{id}", response_model=MataKuliahSchema)
 async def find_mata_kuliah_by_id(
     id: int,
     session: AsyncSession = Depends(get_async_session)
 ): 
-    await getMataKuliahById(id, session)
+    return await getMataKuliahById(id, session)
 
 @router.get("", response_model=Page[MataKuliahSchema])
 async def get_mata_kuliah_pageable(

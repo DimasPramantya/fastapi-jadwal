@@ -36,7 +36,7 @@ async def createMataKuliah(
         is_lab= mataKuliah.is_lab,
         id_program_studi= mataKuliah.id_program_studi,
         nama_prodi= mataKuliah.nama_prodi,
-        nama_prodi_end= mataKuliah.nama_prodi_en,
+        nama_prodi_en= mataKuliah.nama_prodi_en,
         index_minimum= mataKuliah.index_minimum,
         kd_mata_kuliah= mataKuliah.kd_mata_kuliah,
         semester= mataKuliah.semester,

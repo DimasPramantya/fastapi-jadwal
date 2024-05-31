@@ -6,9 +6,9 @@ class MataKuliahBase(BaseModel):
     kd_mata_kuliah: str
     nama_mata_kuliah: str
     nama_mata_kuliah_inggris: str
-    sks: str
+    sks: int
     semester: str
-    tingkat_mata_kuliah: str
+    tingkat_mata_kuliah: int
     is_lab: bool
     index_minimum: bool
     id_program_studi: int
