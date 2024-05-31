@@ -1,7 +1,8 @@
 #/schemas/dosen_schema.py
 from pydantic import BaseModel, Field
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
+from .preferensi_jadwal_dosen_schema import preferensi_jadwal_dosen_model_to_dict, PreferensiJadwalDosen
 
 class BaseModel(BaseModel):
     class Config:
@@ -24,6 +25,7 @@ class DosenBase(BaseModel):
     telp_seluler: str
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
+    preferensi: List[PreferensiJadwalDosen] = []
     
 class CreateDosen(DosenBase):
     pass
@@ -51,6 +53,7 @@ def dosen_model_to_dict(dosen):
         "alamat": dosen.alamat,
         "agama": dosen.agama,
         "telp_seluler": dosen.telp_seluler,
+        "preferensi": [preferensi_jadwal_dosen_model_to_dict(p) for p in dosen.preferensi_jadwal_dosen] if dosen.preferensi_jadwal_dosen else None,  
         "created_at": dosen.created_at,
         "updated_at": dosen.updated_at
     }

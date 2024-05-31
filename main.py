@@ -12,6 +12,7 @@ from router.mata_kuliah_router import router as mataKuliahRouter
 from router.slot_router import router as slotRouter
 from router.preferensi_jadwal_dosen_router import router as preferensiJadwalDosenRouter
 from router.jadwal_router import router as jadwalRouter;
+from router.pengajaran_router import router as PengajaranRouter
 from exceptions.global_exception import *
 
 
@@ -39,6 +40,7 @@ app.include_router(router=mataKuliahRouter, prefix="/api/mata-kuliah", tags=["Ma
 app.include_router(router=slotRouter, prefix="/api/slot", tags=["Slot"])
 app.include_router(router=preferensiJadwalDosenRouter, prefix="/api/preferensi", tags=["Preferensi Jadwal Dosen"])
 app.include_router(router=jadwalRouter, prefix="/api/jadwal", tags=["Jadwal"])
+app.include_router(router=PengajaranRouter, prefix="/api/pengajaran", tags=["Pengajaran"])
 
 
 app.add_exception_handler(EntityNotFoundException, entityNotFoundExceptionHandler)

@@ -1,0 +1,107 @@
+[
+    {
+        "schedule": "Pukul :20:15-22:00 Day: wed",
+        "room": "Ruangan:  415",
+        "class": "Kelas: TI-20-KA, Shift: malam",
+        "course": "Kode Matakuliah: Basis Data",
+        "lecturer": "Dosen Pengampu: Septian Cahyadi, preferred_time_slots: [Pukul :13:15-15:00 Day: thu, Pukul :20:15-22:00 Day: wed]"
+    },
+    {
+        "schedule": "Pukul :10:15-12:00 Day: Mon",
+        "room": "Ruangan:  415",
+        "class": "Kelas: TI-20-KA, Shift: malam",
+        "course": "Kode Matakuliah: Kecerdasan Buatan",
+        "lecturer": "Dosen Pengampu: Septian Cahyadi, preferred_time_slots: [Pukul :13:15-15:00 Day: thu, Pukul :20:15-22:00 Day: wed]"
+    },
+    {
+        "schedule": "Pukul :15:15-17:00 Day: thu",
+        "room": "Ruangan:  215",
+        "class": "Kelas: TI-20-PA, Shift: pagi",
+        "course": "Kode Matakuliah: Lab Pemrograman Web",
+        "lecturer": "Dosen Pengampu: Febri Damatraseta, preferred_time_slots: [Pukul :13:15-15:00 Day: Wed, Pukul :15:15-17:00 Day: Wed]"
+    },
+    {
+        "schedule": "Pukul :20:15-22:00 Day: wed",
+        "room": "Ruangan:  409",
+        "class": "Kelas: TI-21-KA, Shift: malam",
+        "course": "Kode Matakuliah: Matematika Diskrit",
+        "lecturer": "Dosen Pengampu: Isnan Mulia, preferred_time_slots: [Pukul :13:15-15:00 Day: Mon, Pukul :20:15-22:00 Day: Mon]"
+    },
+    {
+        "schedule": "Pukul :18:00-20:00 Day: wed",
+        "room": "Ruangan:  409",
+        "class": "Kelas: TI-21-KA, Shift: malam",
+        "course": "Kode Matakuliah: Pengantar Teknologi Informasi",
+        "lecturer": "Dosen Pengampu: Suci Sutjipto, preferred_time_slots: [Pukul :13:15-15:00 Day: Fri, Pukul :15:15-17:00 Day: Fri]"
+    },
+    {
+        "schedule": "Pukul :15:15-17:00 Day: wed",
+        "room": "Ruangan:  409",
+        "class": "Kelas: TI-21-PA, Shift: pagi",
+        "course": "Kode Matakuliah: Tata Kelola TI",
+        "lecturer": "Dosen Pengampu: Edi Nurachmad, preferred_time_slots: [Pukul :13:15-15:00 Day: Mon, Pukul :15:15-17:00 Day: Mon]"
+    },
+    {
+        "schedule": "Pukul :08:15-10:00 Day: thu",
+        "room": "Ruangan:  215",
+        "class": "Kelas: TI-22-PA, Shift: pagi",
+        "course": "Kode Matakuliah: Lab Pemrograman Web",
+        "lecturer": "Dosen Pengampu: Febri Damatraseta, preferred_time_slots: [Pukul :13:15-15:00 Day: Wed, Pukul :15:15-17:00 Day: Wed]"
+    },
+    {
+        "schedule": "Pukul :20:15-22:00 Day: thu",
+        "room": "Ruangan:  408",
+        "class": "Kelas: TI-21-KA, Shift: malam",
+        "course": "Kode Matakuliah: Pengantar Teknologi Informasi",
+        "lecturer": "Dosen Pengampu: Anton Sukamto, preferred_time_slots: [Pukul :20:15-22:00 Day: Tue, Pukul :15:15-17:00 Day: Tue]"
+    },
+    {
+        "schedule": "Pukul :18:00-20:00 Day: mon",
+        "room": "Ruangan:  408",
+        "class": "Kelas: TI-21-KA, Shift: malam",
+        "course": "Kode Matakuliah: Basis Data",
+        "lecturer": "Dosen Pengampu: Septian Cahyadi, preferred_time_slots: [Pukul :13:15-15:00 Day: thu, Pukul :20:15-22:00 Day: wed]"
+    },
+    {
+        "schedule": "Pukul :08:15-10:00 Day: wed",
+        "room": "Ruangan:  210",
+        "class": "Kelas: TI-21-PA, Shift: pagi",
+        "course": "Kode Matakuliah: Lab Pemrograman Web",
+        "lecturer": "Dosen Pengampu: Febri Damatraseta, preferred_time_slots: [Pukul :13:15-15:00 Day: Wed, Pukul :15:15-17:00 Day: Wed]"
+    },
+    {
+        "schedule": "Pukul :18:00-20:00 Day: thu",
+        "room": "Ruangan:  408",
+        "class": "Kelas: TI-20-KA, Shift: malam",
+        "course": "Kode Matakuliah: Matematika Dasar",
+        "lecturer": "Dosen Pengampu: Isnan Mulia, preferred_time_slots: [Pukul :13:15-15:00 Day: Mon, Pukul :20:15-22:00 Day: Mon]"
+    },
+    {
+        "schedule": "Pukul :20:15-22:00 Day: thu",
+        "room": "Ruangan:  409",
+        "class": "Kelas: TI-20-KA, Shift: malam",
+        "course": "Kode Matakuliah: Pengantar Teknologi Informasi",
+        "lecturer": "Dosen Pengampu: Suci Sutjipto, preferred_time_slots: [Pukul :13:15-15:00 Day: Fri, Pukul :15:15-17:00 Day: Fri]"
+    },
+    {
+        "schedule": "Pukul :15:15-17:00 Day: Mon",
+        "room": "Ruangan:  408",
+        "class": "Kelas: TI-20-PA, Shift: pagi",
+        "course": "Kode Matakuliah: Tata Kelola TI",
+        "lecturer": "Dosen Pengampu: Edi Nurachmad, preferred_time_slots: [Pukul :13:15-15:00 Day: Mon, Pukul :15:15-17:00 Day: Mon]"
+    },
+    {
+        "schedule": "Pukul :10:15-12:00 Day: thu",
+        "room": "Ruangan:  210",
+        "class": "Kelas: TI-23-PA, Shift: pagi",
+        "course": "Kode Matakuliah: Lab Pemrograman Web",
+        "lecturer": "Dosen Pengampu: Febri Damatraseta, preferred_time_slots: [Pukul :13:15-15:00 Day: Wed, Pukul :15:15-17:00 Day: Wed]"
+    },
+    {
+        "schedule": "Pukul :20:15-22:00 Day: tue",
+        "room": "Ruangan:  408",
+        "class": "Kelas: TI-21-KA, Shift: malam",
+        "course": "Kode Matakuliah: Manajemen Projek",
+        "lecturer": "Dosen Pengampu: Anton Sukamto, preferred_time_slots: [Pukul :20:15-22:00 Day: Tue, Pukul :15:15-17:00 Day: Tue]"
+    }
+]
