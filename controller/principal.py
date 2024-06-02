@@ -22,27 +22,11 @@ REDIRECT_URI = os.getenv("REDIRECT_URI")
 PROJECT_ID = os.getenv("PROJECT_ID")
 CLIENT_SECRET_FILE = os.getenv("CLIENT_SECRET_FILE")
 
-SCOPES = ["https://www.googleapis.com/auth/calendar.events", "https://www.googleapis.com/auth/userinfo.profile", "openid"]
-
+SCOPES = ["https://www.googleapis.com/auth/calendar.events", "https://www.googleapis.com/auth/userinfo.profile", "openid", "https://www.googleapis.com/auth/userinfo.email"]
 
 
 flow = Flow.from_client_secrets_file(CLIENT_SECRET_FILE, scopes=SCOPES,  redirect_uri=REDIRECT_URI)
 
-
-# flow = Flow.from_client_config(
-#     {
-#         "web": {
-#             "client_id": CLIENT_ID,
-#             "project_id": PROJECT_ID,
-#             "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-#             "token_uri": "https://oauth2.googleapis.com/token",
-#             "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-#             "client_secret": CLIENT_SECRET,
-#             "redirect_uri": "https://fastapi-jadwal-j6usm5hcwa-uc.a.run.app/principal/oauth-redirect"
-#         }
-#     },
-#     scopes=SCOPES
-# )
 
 async def oauth(response: Response):
     # Set headers
