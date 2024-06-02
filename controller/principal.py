@@ -32,7 +32,7 @@ flow = Flow.from_client_config(
             "token_uri": "https://oauth2.googleapis.com/token",
             "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
             "client_secret": CLIENT_SECRET,
-            "redirect_uris": [REDIRECT_URI]
+            "redirect_uri": REDIRECT_URI
         }
     },
     scopes=SCOPES
