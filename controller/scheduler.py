@@ -14,6 +14,16 @@ lts = []
 slots = []
 bits_needed_backup_store = {}
 
+def initialize_globals():
+    global Kelas, Dosen, CourseClass, Room, Schedule
+    Kelas.kelas = []
+    Dosen.dosen = []
+    CourseClass.classes = []
+    Room.rooms = []
+    Schedule.schedules = []
+
+initialize_globals()
+
 def bits_needed(x):
     global bits_needed_backup_store
     r = bits_needed_backup_store.get(id(x))
@@ -32,23 +42,7 @@ def join_cpg_pair(_cpg):
 
 def convert_input_to_bin():
     global cpg, lts, slots, max_score
-#course_professor_group
-    cpg = [CourseClass.find("Basis Data"), Dosen.find("Septian Cahyadi"), Kelas.find("TI-20-KA"),
-           CourseClass.find("Kecerdasan Buatan"), Dosen.find("Septian Cahyadi"), Kelas.find("TI-20-KA"),
-           CourseClass.find("Lab Pemrograman Web"), Dosen.find("Febri Damatraseta"), Kelas.find("TI-20-PA"),
-           CourseClass.find("Matematika Diskrit"), Dosen.find("Isnan Mulia"), Kelas.find("TI-21-KA"),
-           CourseClass.find("Pengantar Teknologi Informasi"), Dosen.find("Suci Sutjipto"), Kelas.find("TI-21-KA"),
-           CourseClass.find("Tata Kelola TI"), Dosen.find("Edi Nurachmad"), Kelas.find("TI-21-PA"),
-           CourseClass.find("Lab Pemrograman Web"), Dosen.find("Febri Damatraseta"), Kelas.find("TI-22-PA"),
-           CourseClass.find("Pengantar Teknologi Informasi"), Dosen.find("Anton Sukamto"), Kelas.find("TI-21-KA"),
-           CourseClass.find("Basis Data"), Dosen.find("Septian Cahyadi"), Kelas.find("TI-21-KA"),
-           CourseClass.find("Lab Pemrograman Web"), Dosen.find("Febri Damatraseta"), Kelas.find("TI-21-PA"),
-           CourseClass.find("Matematika Dasar"), Dosen.find("Isnan Mulia"), Kelas.find("TI-20-KA"),
-           CourseClass.find("Pengantar Teknologi Informasi"), Dosen.find("Suci Sutjipto"), Kelas.find("TI-20-KA"),
-           CourseClass.find("Tata Kelola TI"), Dosen.find("Edi Nurachmad"), Kelas.find("TI-20-PA"),
-           CourseClass.find("Lab Pemrograman Web"), Dosen.find("Febri Damatraseta"), Kelas.find("TI-23-PA"),
-           CourseClass.find("Manajemen Projek"), Dosen.find("Anton Sukamto"), Kelas.find("TI-21-KA")
-           ]
+    print(cpg)
 
     for _c in range(len(cpg)):
         if _c % 3:  # CourseClass
@@ -229,6 +223,7 @@ def is_evening_class(class_index, slot_index):
 
 def evaluate(chromosomes):
     global max_score
+    print("inside evaluate")
     score = 0
     score = score + use_spare_classroom(chromosomes)
     score = score + faculty_member_one_class(chromosomes)
@@ -428,13 +423,20 @@ def genetic_algorithm():
         with open("schedule_data.json", "w") as json_file:
             json.dump(json_data, json_file, indent=4)
 
-def generate_schedule(kelas, dosen, course_classes, rooms, schedules, cpg):
+def generate_schedule(kelas, dosen, course_classes, rooms, schedules, _cpg):
+    print("inside generate schedule")
     Kelas.kelas = kelas
+
     Dosen.dosen = dosen
+
     CourseClass.classes = course_classes
+    
     Room.rooms = rooms
+
     Schedule.schedules = schedules
-    cpg = cpg
+    
+    global cpg 
+    cpg = _cpg
 
     random.seed()
 

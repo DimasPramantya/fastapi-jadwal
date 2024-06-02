@@ -7,6 +7,9 @@ import time
 import json
 #from ics import Calendar, Event
 from datetime import datetime, timedelta
+from controller.jadwal_controller import *
+from util.db_connection import AsyncSession, get_async_session
+from fastapi import APIRouter, Depends, HTTPException, Query
 #import matplotlib.pyplot as plt
 
 Kelas.kelas = [Kelas("TI-20-PA", 20,shift="pagi"), Kelas("TI-21-PA", 20, shift="pagi"), Kelas("TI-22-PA", 20, shift="pagi"), 
@@ -49,6 +52,10 @@ lts = []
 slots = []
 bits_needed_backup_store = {}  
 
+# async def fetch_cpg():
+#     global cpg
+#     cpg = await generateJadwal(AsyncSession = Depends(get_async_session))
+#     print("Cpg in fetch_cpg", cpg)
 
 def bits_needed(x):
     global bits_needed_backup_store
@@ -66,9 +73,9 @@ def join_cpg_pair(_cpg):
     return res
 
 
-def convert_input_to_bin():
+async def convert_input_to_bin():
     global cpg, lts, slots, max_score
-
+    
     for _c in range(len(cpg)):
         if _c % 3:  # CourseClass
             cpg[_c] = (bin(cpg[_c])[2:]).rjust(bits_needed(CourseClass.classes), '0')
@@ -247,17 +254,23 @@ def is_evening_class(class_index, slot_index):
 
 
 def evaluate(chromosomes):
-    global max_score
+    global cpg, lts, slots, max_score
     score = 0
-    score = score + use_spare_classroom(chromosomes)
-    score = score + faculty_member_one_class(chromosomes)
-    score = score + classroom_size(chromosomes)
-    score = score + kelas_member_one_class(chromosomes)
-    score = score + appropriate_room(chromosomes)
-    score = score + appropriate_timeslot(chromosomes)
+    score += use_spare_classroom(chromosomes)
+    score += faculty_member_one_class(chromosomes)
+    score += classroom_size(chromosomes)
+    score += kelas_member_one_class(chromosomes)
+    score += appropriate_room(chromosomes)
+    score += appropriate_timeslot(chromosomes)
     score += dosen_preferred_time_slots(chromosomes)
+    
+    print("Score before return: ", score)
+    print("CPG global : ", cpg)
+    print("lts global : ", lts)
+    print("slots global : ", slots)
+    print("Max Score global : ", max_score)
 
-    # Tambahkan evaluasi khusus untuk jadwal kelas malam
+    
     for chromosome in chromosomes:
         class_index = int(kelas_bits(chromosome), 2)
         slot_index = int(slot_bits(chromosome), 2)
@@ -340,14 +353,14 @@ def acceptance_probability(old_cost, new_cost, temperature):
     else:
         return math.exp((old_cost - new_cost) / temperature)
 
-def simulated_annealing():
+async def simulated_annealing():
     global population 
     alpha = 0.9
     T = 1.0
     T_min = 0.00001
     start_time = time.time()  
     
-    convert_input_to_bin()
+    await convert_input_to_bin()
     population = init_population(1) # as simulated annealing is a single-state method
     old_cost = cost(population[0])
     simulated_annealing_scores = []  # List to store scores of each iteration
@@ -406,10 +419,10 @@ def print_schedule_per_class(best_solution):
         print()
 
 
-def genetic_algorithm():
+async def genetic_algorithm():
     start_time = time.time() 
     generation = 0
-    convert_input_to_bin()
+    await convert_input_to_bin()
     population = init_population(3)
     best_solution = None
 
@@ -444,7 +457,7 @@ def genetic_algorithm():
         with open("schedule_data.json", "w") as json_file:
             json.dump(json_data, json_file, indent=4)
 
-def generate_schedule(kelas, dosen, course_classes, rooms, schedules, cpg):
+async def generate_schedule(kelas, dosen, course_classes, rooms, schedules, cpg):
     Kelas.kelas = kelas
     Dosen.dosen = dosen
     CourseClass.classes = course_classes
@@ -452,18 +465,17 @@ def generate_schedule(kelas, dosen, course_classes, rooms, schedules, cpg):
     Schedule.schedules = schedules
 
     start_time = time.time()
-    simulated_annealing()
-    genetic_algorithm()
+    await simulated_annealing()
+    await genetic_algorithm()
 
     all_schedules = []
 
     return
 
 
-def main():
+async def main():
     random.seed()
-    simulated_annealing()
-    genetic_algorithm()
+    await simulated_annealing()
+    await genetic_algorithm()
     
     all_schedules = []
-

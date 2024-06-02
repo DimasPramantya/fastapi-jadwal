@@ -19,7 +19,7 @@ from exceptions.entity_not_found_exception import EntityNotFoundException
 from exceptions.bad_request_exception import BadRequestException
 
 from .Classes import *
-from .algorithm import *
+#from .algorithm import *
 
 async def generateJadwal(
     session: AsyncSession
@@ -53,6 +53,7 @@ async def generateJadwal(
         Dosen.dosen.append(Dosen(dosen.nama_depan + " " + dosen.nama_belakang, preferred_time_slots=preferred_time_slots))
 
     print(Dosen.dosen)  # To verify the output
+    print("Panjang dosen adalah" + str(len(Dosen.dosen)))
 
     #FETCH COURSE
     result = await session.execute(
@@ -61,6 +62,7 @@ async def generateJadwal(
     mata_kuliah_list = result.scalars().all()
     mataKuliahDict = [mata_kuliah_model_to_dict(d) for d in mata_kuliah_list]
     CourseClass.classes = [CourseClass(code=k["nama_mata_kuliah"], is_lab=k["is_lab"]) for k in mataKuliahDict]
+    print("element kelas")
     print(CourseClass.classes)
 
     #Fetch room
@@ -95,10 +97,7 @@ async def generateJadwal(
 
         if course_index != -1 and dosen_index != -1 and kelas_index != -1:
             cpg.extend([course_index, dosen_index, kelas_index])
+ 
+    generate_schedule(Kelas.kelas, Dosen.dosen, CourseClass.classes, Room.rooms, Schedule.schedules, cpg)
 
-    print(cpg)
-
-    generate_schedule(Kelas.kelas, dosen, CourseClass.classes, Room.rooms, Schedule.schedules, cpg)
-
-    return
-
+    return cpg
