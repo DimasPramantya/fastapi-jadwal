@@ -25,7 +25,7 @@ class Dosen(Base):
     pengajaran: Mapped[List["Pengajaran"]] = relationship("Pengajaran", back_populates="dosen", lazy="selectin")
     preferensi_jadwal_dosen: Mapped[List["PreferensiJadwalDosen"]] = relationship("PreferensiJadwalDosen", back_populates="dosen", lazy="selectin")
     
-    id_user: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    id_user: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=True)
     user: Mapped["User"] = relationship("User", back_populates="dosen", lazy="selectin")
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, nullable=True)
