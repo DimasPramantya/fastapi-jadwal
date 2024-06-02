@@ -41,7 +41,8 @@ flow = Flow.from_client_config(
 async def oauth():
     authorization_url, _ = flow.authorization_url(
         access_type='offline',
-        prompt='consent'
+        prompt='consent',
+        redirect_uri=REDIRECT_URI
     )
     return JSONResponse(content={"url": authorization_url})
 
