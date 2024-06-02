@@ -13,8 +13,8 @@ from router.slot_router import router as slotRouter
 from router.preferensi_jadwal_dosen_router import router as preferensiJadwalDosenRouter
 from router.jadwal_router import router as jadwalRouter;
 from router.pengajaran_router import router as PengajaranRouter
+from router.principal_router import router as principalRouter
 from exceptions.global_exception import *
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -31,7 +31,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
-
+app.include_router(router= principalRouter, prefix="/principal", tags=["Principal"])
 app.include_router(router= dosenRouter, prefix="/api/dosen", tags=["Dosen"])
 app.include_router(router = kelasRouter, prefix="/api/kelas", tags=["Kelas"])
 app.include_router(router = semesterRouter, prefix="/api/semester", tags=["Semester"])
