@@ -1,7 +1,7 @@
 #/model/dosen_model.py
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from typing import List
-from sqlalchemy import String, DateTime, event
+from sqlalchemy import String, DateTime, event, ForeignKey
 from datetime import datetime
 
 from . import Base
@@ -24,12 +24,17 @@ class Dosen(Base):
     kelas: Mapped[List["Kelas"]] = relationship("Kelas", back_populates="dosen", lazy="selectin")
     pengajaran: Mapped[List["Pengajaran"]] = relationship("Pengajaran", back_populates="dosen", lazy="selectin")
     preferensi_jadwal_dosen: Mapped[List["PreferensiJadwalDosen"]] = relationship("PreferensiJadwalDosen", back_populates="dosen", lazy="selectin")
+    
+    id_user: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user: Mapped["User"] = relationship("User", back_populates="dosen", lazy="selectin")
+
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, nullable=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=True) 
     
 from model.kelas_model import Kelas
 from .pengajaran_model import Pengajaran 
 from .preferensi_jadwal_dosen_model import PreferensiJadwalDosen
+from .user_model import User
 
 @event.listens_for(Dosen, 'before_update')
 def update_timestamp(mapper, connection, target):

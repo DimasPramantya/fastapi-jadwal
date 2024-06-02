@@ -19,6 +19,9 @@ class Jadwal(Base):
     id_pengajaran: Mapped[int] = mapped_column(ForeignKey("pengajaran.id"))
     pengajaran: Mapped["Pengajaran"] = relationship("Pengajaran", back_populates="jadwal", lazy="selectin")
 
+    start_date_time: Mapped[datetime] = mapped_column(DateTime)
+    end_date_time: Mapped[datetime] = mapped_column(DateTime)
+
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, onupdate=datetime.now) 
 

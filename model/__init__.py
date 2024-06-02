@@ -12,4 +12,6 @@ from .pengajaran_model import Pengajaran
 from .jadwal_model import Jadwal
 from .semester_model import Semester
 from .slot_model import Slot
+from .user_model import User
+
 
