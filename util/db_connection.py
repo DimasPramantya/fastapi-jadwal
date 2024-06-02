@@ -1,10 +1,21 @@
+import os
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession as AsyncSessionType
 from typing import AsyncGenerator
 from model import Base
+from dotenv import load_dotenv
 
-DATABASE_URL = "mysql+aiomysql://root:root@localhost:3306/skripsi_thesya"
+load_dotenv()
+
+# Get the database connection details from environment variables
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_NAME = os.getenv("DB_NAME")
+DB_URL = os.getenv("DB_URL")
+
+# Construct the DATABASE_URL for SQLAlchemy
+DATABASE_URL = f"mysql+aiomysql://{DB_USER}:{DB_PASSWORD}@/{DB_NAME}?unix_socket=/cloudsql/{DB_URL}"
 
 engine = create_async_engine(DATABASE_URL, echo=True)
 

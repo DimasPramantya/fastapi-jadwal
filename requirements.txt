@@ -6,3 +6,4 @@ itsdangerous
 PyJWT
 aiomysql
 SQLAlchemy
+python-dotenv
