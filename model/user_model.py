@@ -21,7 +21,7 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, onupdate=datetime.now) 
     
-    dosen: Mapped[List["Dosen"]] = relationship("Dosen", back_populates="users", lazy="selectin")
+    dosen: Mapped["Dosen"] = relationship("Dosen", back_populates="users", lazy="selectin")
  
 from .dosen_model import Dosen
 
