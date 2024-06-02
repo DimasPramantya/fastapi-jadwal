@@ -31,7 +31,8 @@ flow = Flow.from_client_config(
             "auth_uri": "https://accounts.google.com/o/oauth2/auth",
             "token_uri": "https://oauth2.googleapis.com/token",
             "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-            "client_secret": CLIENT_SECRET
+            "client_secret": CLIENT_SECRET,
+            "redirect_uri": REDIRECT_URI
         }
     },
     scopes=SCOPES
@@ -40,8 +41,7 @@ flow = Flow.from_client_config(
 async def oauth():
     authorization_url, _ = flow.authorization_url(
         access_type='offline',
-        prompt='consent',
-        redirect_uri=REDIRECT_URI
+        prompt='consent'
     )
     return JSONResponse(content={"url": authorization_url})
 
