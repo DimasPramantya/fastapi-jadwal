@@ -9,6 +9,6 @@ async def oauth_with_google(response: Response):
     return await oauth(response)
 
 @router.get("/oauth-redirect")
-async def google_oauth_redirect(request: Request):
+async def google_oauth_redirect(request: Request, session = Depends(get_async_session)):
     code = request.query_params.get("code")
-    return await redirectOauth(code)
+    return await redirectOauth(code, session)

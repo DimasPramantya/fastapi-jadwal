@@ -11,6 +11,9 @@ from google.oauth2.credentials import Credentials
 from dotenv import load_dotenv
 from fastapi.responses import JSONResponse
 import requests
+from sqlalchemy.ext.asyncio import AsyncSession
+from model.user_model import User as UserModel
+from .user_controller import get_user_by_email
 
 load_dotenv()
 
@@ -39,7 +42,7 @@ async def oauth(response: Response):
     )
     return JSONResponse(content={"url": authorization_url})
 
-async def redirectOauth(code: str):
+async def redirectOauth(code: str, session: AsyncSession):
     if not code:
         raise HTTPException(status_code=400, detail="Authorization code not found")
 
@@ -52,6 +55,21 @@ async def redirectOauth(code: str):
 
         # Get user data
         user_data = getUserData(credentials.token)
+
+        #get user by email
+        currentUserDb = await get_user_by_email(user_data['email'], session)
+
+        if not currentUserDb:
+            user = UserModel(
+                username = user_data['given_name'],
+                email = user_data['email'],
+                image_picture = user_data['picture'],
+                role = "ADMIN",
+                fullname = user_data['name']
+            )
+            session.add(user)
+            await session.commit()
+            await session.refresh(user)
 
         # Return user data as JSON
         return JSONResponse(content={"user_data": user_data, "token": credentials.token})
