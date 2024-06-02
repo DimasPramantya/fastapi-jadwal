@@ -21,6 +21,7 @@ class Dosen(Base):
     alamat: Mapped[str] = mapped_column(String(255), nullable=True)  # Specify length
     agama: Mapped[str] = mapped_column(String(50), nullable=True)  # Specify length
     telp_seluler: Mapped[str] = mapped_column(String(20), nullable=True) 
+    email: Mapped[str] = mapped_column(String(255), nullable=True)
     kelas: Mapped[List["Kelas"]] = relationship("Kelas", back_populates="dosen", lazy="selectin")
     pengajaran: Mapped[List["Pengajaran"]] = relationship("Pengajaran", back_populates="dosen", lazy="selectin")
     preferensi_jadwal_dosen: Mapped[List["PreferensiJadwalDosen"]] = relationship("PreferensiJadwalDosen", back_populates="dosen", lazy="selectin")
