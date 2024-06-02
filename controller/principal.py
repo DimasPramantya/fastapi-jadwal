@@ -1,4 +1,4 @@
-from fastapi import HTTPException, Request, Depends
+from fastapi import HTTPException, Request, Depends, Response
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import RedirectResponse
 from google_auth_oauthlib.flow import InstalledAppFlow, Flow
@@ -20,25 +20,35 @@ JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 PROJECT_ID = os.getenv("PROJECT_ID")
+CLIENT_SECRET_FILE = os.getenv("CLIENT_SECRET_FILE")
 
 SCOPES = ["https://www.googleapis.com/auth/calendar.events", "https://www.googleapis.com/auth/userinfo.profile", "openid"]
 
-flow = Flow.from_client_config(
-    {
-        "web": {
-            "client_id": CLIENT_ID,
-            "project_id": PROJECT_ID,
-            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-            "token_uri": "https://oauth2.googleapis.com/token",
-            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-            "client_secret": CLIENT_SECRET,
-            "redirect_uri": "https://fastapi-jadwal-j6usm5hcwa-uc.a.run.app/principal/oauth-redirect"
-        }
-    },
-    scopes=SCOPES
-)
 
-async def oauth():
+
+flow = Flow.from_client_secrets_file(CLIENT_SECRET_FILE, scopes=SCOPES,  redirect_uri=REDIRECT_URI)
+
+
+# flow = Flow.from_client_config(
+#     {
+#         "web": {
+#             "client_id": CLIENT_ID,
+#             "project_id": PROJECT_ID,
+#             "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+#             "token_uri": "https://oauth2.googleapis.com/token",
+#             "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+#             "client_secret": CLIENT_SECRET,
+#             "redirect_uri": "https://fastapi-jadwal-j6usm5hcwa-uc.a.run.app/principal/oauth-redirect"
+#         }
+#     },
+#     scopes=SCOPES
+# )
+
+async def oauth(response: Response):
+    # Set headers
+    response.headers["Access-Control-Allow-Origin"] = '*'
+    response.headers["Access-Control-Allow-Credentials"] = 'true'
+    response.headers["Referrer-Policy"] = "no-referrer-when-downgrade"
     authorization_url, _ = flow.authorization_url(
         access_type='offline',
         prompt='consent'

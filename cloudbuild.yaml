@@ -4,6 +4,11 @@ steps:
       - 'cp'
       - '${_PATH_TO_ENV}'
       - '.env'
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: 
+      - 'cp'
+      - '${_PATH_TO_CREDENTIALS}'
+      - 'oauth_credentials.json'
   - name: gcr.io/cloud-builders/docker
     args:
       - build
