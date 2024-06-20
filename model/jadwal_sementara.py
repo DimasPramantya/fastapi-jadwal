@@ -5,27 +5,24 @@ from datetime import datetime
 
 from . import Base
 
-class Jadwal(Base):
-    __tablename__ = "jadwal"
+class JadwalSementara(Base):
+    __tablename__ = "jadwal_sementara"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
     id_slot: Mapped[int] = mapped_column(ForeignKey("slot.id"))
-    slot: Mapped["Slot"] = relationship("Slot", back_populates="jadwal", lazy="selectin")
+    slot: Mapped["Slot"] = relationship("Slot", back_populates="jadwal_sementara", lazy="selectin")
     
     id_ruangan: Mapped[int] = mapped_column(ForeignKey("ruangan.id"))
-    ruangan: Mapped["Ruangan"] = relationship("Ruangan", back_populates="jadwal", lazy="selectin")
+    ruangan: Mapped["Ruangan"] = relationship("Ruangan", back_populates="jadwal_sementara", lazy="selectin")
 
     id_pengajaran: Mapped[int] = mapped_column(ForeignKey("pengajaran.id"))
-    pengajaran: Mapped["Pengajaran"] = relationship("Pengajaran", back_populates="jadwal", lazy="selectin")
+    pengajaran: Mapped["Pengajaran"] = relationship("Pengajaran", back_populates="jadwal_sementara", lazy="selectin")
 
-    start_date_time: Mapped[datetime] = mapped_column(DateTime)
-    end_date_time: Mapped[datetime] = mapped_column(DateTime)
-
-    is_created: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_conflicted: Mapped[bool] = mapped_column(Boolean, default=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, onupdate=datetime.now)  
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, onupdate=datetime.now) 
 
 from .slot_model import Slot
 from .ruangan_model import Ruangan

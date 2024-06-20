@@ -15,7 +15,7 @@ DB_NAME = os.getenv("DB_NAME")
 DB_URL = os.getenv("DB_URL")
 
 # Construct the DATABASE_URL for SQLAlchemy
-DATABASE_URL = f"mysql+aiomysql://{DB_USER}:{DB_PASSWORD}@/{DB_NAME}?unix_socket=/cloudsql/{DB_URL}"
+DATABASE_URL = f"mysql+aiomysql://{DB_USER}:{DB_PASSWORD}@34.101.188.235/{DB_NAME}"
 
 engine = create_async_engine(DATABASE_URL, echo=True)
 

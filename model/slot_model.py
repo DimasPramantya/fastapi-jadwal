@@ -18,6 +18,8 @@ class Slot(Base):
 
     preferensi_jadwal_dosen: Mapped[List["PreferensiJadwalDosen"]] = relationship("PreferensiJadwalDosen", back_populates="slot", lazy="selectin")
     jadwal: Mapped[List["Jadwal"]] = relationship("Jadwal", back_populates="slot", lazy="selectin")
+    jadwal_sementara: Mapped[List["JadwalSementara"]] = relationship("JadwalSementara", back_populates="slot", lazy="selectin")
 
 from .jadwal_model import Jadwal
+from .jadwal_sementara import JadwalSementara
 from .preferensi_jadwal_dosen_model import PreferensiJadwalDosen

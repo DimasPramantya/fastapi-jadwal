@@ -22,6 +22,7 @@ async def createDosen(dosen: CreateDosen, session: AsyncSession) -> DosenModel:
         alamat=dosen.alamat,
         agama=dosen.agama,
         telp_seluler=dosen.telp_seluler,
+        email=dosen.email
     )
     session.add(new_dosen)
     await session.commit()

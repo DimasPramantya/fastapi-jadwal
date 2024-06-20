@@ -26,6 +26,7 @@ class Pengajaran(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, onupdate=datetime.now)
 
     jadwal: Mapped[List["Jadwal"]] = relationship("Jadwal", back_populates="pengajaran", lazy="selectin")
+    jadwal_sementara: Mapped[List["JadwalSementara"]] = relationship("JadwalSementara", back_populates="pengajaran", lazy="selectin")
 
 
 from .dosen_model import Dosen
@@ -33,4 +34,5 @@ from .mata_kuliah_model import MataKuliah
 from .kelas_model import Kelas
 from .jadwal_model import Jadwal
 from .semester_model import Semester
+from .jadwal_sementara import JadwalSementara
     

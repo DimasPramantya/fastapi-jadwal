@@ -1,6 +1,6 @@
 import random
 import copy
-from .Classes import *
+from ..controller.Classes import *
 from math import ceil, log2
 import math
 import time
@@ -60,6 +60,11 @@ def convert_input_to_bin():
         slots.append((bin(t)[2:]).rjust(bits_needed(Schedule.schedules), '0'))
 
     max_score = (len(cpg) - 1) * 3 + len(cpg) * 3
+    
+    # Print statements for debugging
+    print(f"Number of lts: {len(lts)}")
+    print(f"Number of slots: {len(slots)}")
+    print(f"Max score: {max_score}")
 
 
 def course_bits(chromosome):
@@ -175,13 +180,22 @@ def appropriate_room(chromosomes):
     return scores
 
 
-# check that lab is allocated appropriate time slot
 def appropriate_timeslot(chromosomes):
     scores = 0
     for _c in chromosomes:
         class_index = int(course_bits(_c), 2)
         course_class = CourseClass.classes[class_index]
         slot_index = int(slot_bits(_c), 2)
+        
+        # Debugging print statements
+        print(f"Class Index: {class_index}, Slot Index: {slot_index}")
+        print(f"Number of schedules: {len(Schedule.schedules)}")
+        
+        # Ensure slot_index is within the bounds
+        if slot_index < 0 or slot_index >= len(Schedule.schedules):
+            print(f"Invalid slot index: {slot_index}")
+            continue
+
         if course_class.is_lab == Schedule.schedules[slot_index].is_lab_slot:
             scores += 1
     return scores
@@ -424,7 +438,6 @@ def genetic_algorithm():
             json.dump(json_data, json_file, indent=4)
 
 def generate_schedule(kelas, dosen, course_classes, rooms, schedules, _cpg):
-    print("inside generate schedule")
     Kelas.kelas = kelas
 
     Dosen.dosen = dosen
@@ -434,16 +447,24 @@ def generate_schedule(kelas, dosen, course_classes, rooms, schedules, _cpg):
     Room.rooms = rooms
 
     Schedule.schedules = schedules
+
+    print(Kelas.kelas)
+    print(Dosen.dosen)
+    print(CourseClass.classes)
+    print(Room.rooms)
+    print(Schedule.schedules)
     
     global cpg 
     cpg = _cpg
 
-    random.seed()
+    print(cpg)
 
-    start_time = time.time()
-    simulated_annealing()
-    genetic_algorithm()
+    # random.seed()
 
-    all_schedules = []
+    # start_time = time.time()
+    # simulated_annealing()
+    # genetic_algorithm()
+
+    # all_schedules = []
 
     return

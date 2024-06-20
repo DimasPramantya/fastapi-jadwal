@@ -91,7 +91,7 @@ def getUserData(access_token: str):
         print(f"Error fetching user data: {e}")
         return None
 
-def generate_token(credentials):
+def generate_token_oauth(credentials, username, userId, profile_picture):
     payload = {
         "token": credentials.token,
         "refresh_token": credentials.refresh_token,
@@ -99,6 +99,9 @@ def generate_token(credentials):
         "client_id": credentials.client_id,
         "client_secret": credentials.client_secret,
         "scopes": credentials.scopes,
+        "username": username,
+        "userId": userId,
+        "profile_picture": profile_picture,
         "exp": int(time.time()) + 12000
     }
     encoded_jwt = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
