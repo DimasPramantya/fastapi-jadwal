@@ -7,3 +7,4 @@ PyJWT
 aiomysql
 SQLAlchemy
 python-dotenv
+matplotlib
