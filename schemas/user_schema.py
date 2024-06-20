@@ -29,7 +29,7 @@ def user_model_to_dict(user: User):
     return {
         "id": user.id,
         "nama_kelas": user.email,
-        "id_prodi": user.role,
+        "role": user.role,
         "fullname": user.fullname,
         "created_at": user.created_at,
         "updated_at": user.updated_at,

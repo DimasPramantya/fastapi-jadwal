@@ -5,7 +5,7 @@ from model.user_model import User as UserModel
 from dotenv import load_dotenv
 from exceptions.bad_request_exception import BadRequestException
 import os
-import jwt 
+import jwt
 
 load_dotenv()
 
@@ -21,15 +21,10 @@ async def getUserByEmail(email: str, session: AsyncSession):
 async def getUserInfo(token: str, session: AsyncSession):
     payload = verify_token(token)
     if payload:
-        user = await getUserByEmail(payload.get("email"), session)
+        user = await getUserByEmail(payload.get("userId"), session)
         return user
     raise BadRequestException("Invalid token")
 
 def verify_token(token):
-    try:
-        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
-        return payload
-    except jwt.ExpiredSignatureError:
-        return None
-    except jwt.InvalidTokenError:
-        return None
+    payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
+    return payload

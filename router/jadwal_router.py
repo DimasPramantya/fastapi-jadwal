@@ -39,6 +39,5 @@ async def generate_all_jadwal(
     credentials: str = Depends(get_token),
     session = Depends(get_async_session)
 ):
-    print(credentials)
     await generateJadwal(credentials.credentials, session)
     return
