@@ -17,6 +17,29 @@ from .cara1 import generate_schedule
 from datetime import date, timedelta, datetime
 from schemas.jadwal_sementara_schema import jadwal_sementara_to_dict
 
+from fastapi import FastAPI, HTTPException, Request, Depends
+from fastapi.security import OAuth2PasswordBearer
+from fastapi.responses import RedirectResponse
+from google_auth_oauthlib.flow import InstalledAppFlow, Flow
+from googleapiclient.discovery import build
+import secrets
+import jwt  
+import time  
+from datetime import datetime, timedelta
+from google.oauth2.credentials import Credentials
+from pydantic import BaseModel
+from typing import Optional
+from fastapi.middleware.cors import CORSMiddleware
+import os
+import pytz
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+TOKEN_URI=os.getenv("TOKEN_URI")
+CLIENT_ID=os.getenv("CLIENT_ID")
+CLIENT_SECRET=os.getenv("CLIENT_SECRET")
 
 from .Classes import *
 #from .algorithm import * 
@@ -129,7 +152,17 @@ async def getJadwalSementaraCount(session: AsyncSession) -> int:
     count = result.scalar_one()
     return count
 
-async def generateJadwal(session: AsyncSession):
+async def generateJadwal(token, session: AsyncSession):
+    creds = Credentials(
+        token=token,
+        refresh_token=None,
+        token_uri=TOKEN_URI,
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
+        scopes=["https://www.googleapis.com/auth/calendar.events", "https://www.googleapis.com/auth/userinfo.profile", "openid", "https://www.googleapis.com/auth/userinfo.email"]
+    )
+
+    service = build("calendar", "v3", credentials=creds)
     result = await session.execute(select(func.count(JadwalSementaraModel.id)))
     count = result.scalar_one()
     result = await session.execute(
@@ -138,6 +171,7 @@ async def generateJadwal(session: AsyncSession):
     jadwal_list = result.scalars().all()
     start_date = date(2024, 8, 17)
     end_date = date(2024, 12, 31)
+    jakarta_tz = pytz.timezone('Asia/Jakarta')
     for e in jadwal_list:
         jadwal = jadwal_sementara_to_dict(e)
         dates = get_dates_by_day(jadwal["slot"]["day"], start_date, end_date)
@@ -150,6 +184,14 @@ async def generateJadwal(session: AsyncSession):
                 start_date_time=datetime.combine(d, e.slot.start_time),
                 end_date_time=datetime.combine(d, e.slot.end_time)
             )
+            if(e.pengajaran.dosen.email):
+                event = {
+                    "summary": e.pengajaran.mata_kuliah.nama_mata_kuliah,
+                    "start": {"dateTime": jadwal.start_date_time.astimezone(pytz.utc).isoformat(), "timeZone": "Asia/Jakarta"},
+                    "end": {"dateTime": jadwal.end_date_time.astimezone(pytz.utc).isoformat(), "timeZone": "Asia/Jakarta"},
+                    "attendees": [{"email": e.pengajaran.dosen.email}]
+                }
+                event = service.events().insert(calendarId="primary", body=event).execute()
             session.add(jadwal)
             await session.commit()
         print(dates)
@@ -181,3 +223,4 @@ def get_dates_by_day(day_name, start_date: date, end_date: date):
         current_date += timedelta(weeks=1)
 
     return target_dates
+

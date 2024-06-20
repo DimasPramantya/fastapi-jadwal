@@ -4,6 +4,13 @@ from schemas.jadwal_sementara_schema import jadwal_sementara_to_dict
 from util.db_connection import AsyncSession, get_async_session
 from controller.jadwal_controller import *
 from schemas.pagination_schema import Page
+from fastapi.security import HTTPBearer
+from typing import Annotated
+
+security = HTTPBearer()
+
+async def get_token(token: str = Depends(security)):
+    return token
 
 router = APIRouter()
 
@@ -29,7 +36,9 @@ async def get_jadwal_sementara_pageable(
 
 @router.get("/")
 async def get_all_jadwal(
+    credentials: str = Depends(get_token),
     session = Depends(get_async_session)
 ):
-    await generateJadwal(session)
+    print(credentials)
+    await generateJadwal(credentials.credentials, session)
     return
