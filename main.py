@@ -14,6 +14,7 @@ from router.preferensi_jadwal_dosen_router import router as preferensiJadwalDose
 from router.jadwal_router import router as jadwalRouter;
 from router.pengajaran_router import router as PengajaranRouter
 from router.principal_router import router as principalRouter
+from router.user_router import router as userRouter
 from exceptions.global_exception import *
 
 @asynccontextmanager
@@ -41,6 +42,7 @@ app.include_router(router=slotRouter, prefix="/api/slot", tags=["Slot"])
 app.include_router(router=preferensiJadwalDosenRouter, prefix="/api/preferensi", tags=["Preferensi Jadwal Dosen"])
 app.include_router(router=jadwalRouter, prefix="/api/jadwal", tags=["Jadwal"])
 app.include_router(router=PengajaranRouter, prefix="/api/pengajaran", tags=["Pengajaran"])
+app.include_router(router=userRouter, prefix="/api/user", tags=["User"])
 
 
 app.add_exception_handler(EntityNotFoundException, entityNotFoundExceptionHandler)
