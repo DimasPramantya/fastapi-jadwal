@@ -40,6 +40,8 @@ load_dotenv()
 TOKEN_URI=os.getenv("TOKEN_URI")
 CLIENT_ID=os.getenv("CLIENT_ID")
 CLIENT_SECRET=os.getenv("CLIENT_SECRET")
+JWT_SECRET_KEY=os.getenv("JWT_SECRET_KEY")
+JWT_ALGORITHM=os.getenv("JWT_ALGORITHM")
 
 from .Classes import *
 #from .algorithm import * 
@@ -153,6 +155,10 @@ async def getJadwalSementaraCount(session: AsyncSession) -> int:
     return count
 
 async def generateJadwal(token, session: AsyncSession):
+    payload = verify_token(token)
+    if not payload:
+        raise BadRequestException("Invalid token")
+    
     creds = Credentials(
         token=token,
         refresh_token=None,
@@ -225,3 +231,11 @@ def get_dates_by_day(day_name, start_date: date, end_date: date):
 
     return target_dates
 
+def verify_token(token):
+    try:
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
+        return payload
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None

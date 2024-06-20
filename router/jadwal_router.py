@@ -34,8 +34,8 @@ async def get_jadwal_sementara_pageable(
     items_dict = [jadwal_sementara_to_dict(d) for d in jadwal_list]
     return Page(total_elements=total, items=items_dict, size=limit, page=skip)
 
-@router.get("/")
-async def get_all_jadwal(
+@router.post("/")
+async def generate_all_jadwal(
     credentials: str = Depends(get_token),
     session = Depends(get_async_session)
 ):

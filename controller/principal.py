@@ -13,7 +13,7 @@ from fastapi.responses import JSONResponse
 import requests
 from sqlalchemy.ext.asyncio import AsyncSession
 from model.user_model import User as UserModel
-from .user_controller import get_user_by_email
+from .user_controller import getUserByEmail
 
 load_dotenv()
 
@@ -58,7 +58,7 @@ async def redirectOauth(code: str, session: AsyncSession):
 
         print("get user email")
         #get user by email
-        currentUserDb = await get_user_by_email(user_data['email'], session)
+        currentUserDb = await getUserByEmail(user_data['email'], session)
         print(currentUserDb)
 
         if not currentUserDb:
@@ -74,6 +74,9 @@ async def redirectOauth(code: str, session: AsyncSession):
             await session.refresh(user)
 
         # Return user data as JSON
+        token = generate_token_oauth(credentials, user_data['given_name'], user_data['email'], user_data['picture']);
+        return JSONResponse(content={"user_data": user_data, "token": token})
+
     except Exception as e:
         print(f"Error logging in with OAuth2 user: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
@@ -96,8 +99,6 @@ def generate_token_oauth(credentials, username, userId, profile_picture):
         "token": credentials.token,
         "refresh_token": credentials.refresh_token,
         "token_uri": credentials.token_uri,
-        "client_id": credentials.client_id,
-        "client_secret": credentials.client_secret,
         "scopes": credentials.scopes,
         "username": username,
         "userId": userId,
