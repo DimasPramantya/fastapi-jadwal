@@ -8,3 +8,4 @@ aiomysql
 SQLAlchemy
 python-dotenv
 matplotlib
+pytz
