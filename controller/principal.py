@@ -45,7 +45,7 @@ async def oauth(response: Response):
 async def redirectOauth(code: str, session: AsyncSession):
     if not code:
         raise HTTPException(status_code=400, detail="Authorization code not found")
-
+    print('test')
     try:
         # Exchange authorization code for tokens
         flow.fetch_token(code=code)
@@ -56,8 +56,10 @@ async def redirectOauth(code: str, session: AsyncSession):
         # Get user data
         user_data = getUserData(credentials.token)
 
+        print("get user email")
         #get user by email
         currentUserDb = await get_user_by_email(user_data['email'], session)
+        print(currentUserDb)
 
         if not currentUserDb:
             user = UserModel(
@@ -72,8 +74,6 @@ async def redirectOauth(code: str, session: AsyncSession):
             await session.refresh(user)
 
         # Return user data as JSON
-        return JSONResponse(content={"user_data": user_data, "token": credentials.token})
-
     except Exception as e:
         print(f"Error logging in with OAuth2 user: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
