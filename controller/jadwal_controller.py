@@ -155,10 +155,6 @@ async def getJadwalSementaraCount(session: AsyncSession) -> int:
     return count
 
 async def generateJadwal(token, session: AsyncSession):
-    payload = verify_token(token)
-    if not payload:
-        raise BadRequestException("Invalid token")
-    
     creds = Credentials(
         token=token,
         refresh_token=None,

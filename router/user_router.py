@@ -18,6 +18,6 @@ async def getUserInfo(
     credentials: str = Depends(get_token),
     session = Depends(get_async_session)
 ):
-    user = await getUserInfo(credentials.credentials, session)
+    user = await getUserInfo(credentials, session)
     user_dict = user_model_to_dict(user)
     return user_dict
