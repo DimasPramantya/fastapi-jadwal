@@ -186,9 +186,10 @@ async def generateJadwal(token, session: AsyncSession):
             )
             if(e.pengajaran.dosen.email):
                 event = {
-                    "summary": e.pengajaran.mata_kuliah.nama_mata_kuliah,
+                    "summary": e.pengajaran.kelas.nama_kelas + " - " + e.pengajaran.mata_kuliah.nama_mata_kuliah,
                     "start": {"dateTime": jadwal.start_date_time.astimezone(pytz.utc).isoformat(), "timeZone": "Asia/Jakarta"},
                     "end": {"dateTime": jadwal.end_date_time.astimezone(pytz.utc).isoformat(), "timeZone": "Asia/Jakarta"},
+                    "location": e.pengajaran.ruangan.nama_ruangan,
                     "attendees": [{"email": e.pengajaran.dosen.email}]
                 }
                 event = service.events().insert(calendarId="primary", body=event).execute()
