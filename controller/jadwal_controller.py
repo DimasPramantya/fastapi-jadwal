@@ -200,7 +200,7 @@ async def generateJadwal(token, session: AsyncSession):
                 }
                 event = service.events().insert(calendarId="primary", body=event).execute()
             session.add(jadwal)
-            await session.commit()
+        await session.commit()
         print(dates)
     return 
 
