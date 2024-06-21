@@ -108,8 +108,7 @@ async def generateJadwalSementara(session: AsyncSession):
     pengajaran_list = []
 
     # RUN THE ALGORITHM
-    best_solution, best_violating_preferences, conflict_list = generate_schedule(Kelas.kelas, Dosen.dosen, CourseClass.classes, Room.rooms, Schedule.schedules, dosen_course_class_mapping)
-    
+    best_solution, best_violating_preferences, conflict_list_message, conflict_list = generate_schedule(Kelas.kelas, Dosen.dosen, CourseClass.classes, Room.rooms, Schedule.schedules, dosen_course_class_mapping)
     #delete data in temp table
     query = text("""
         DELETE FROM jadwal_sementara
@@ -118,10 +117,13 @@ async def generateJadwalSementara(session: AsyncSession):
 
     for e in best_solution:
         course, room, time, teacher, class_ = e
-        
+        check = False
         courseId = CourseClass.classes[CourseClass.find(course.nama)].id
         kelasId = Kelas.kelas[Kelas.find(class_.nama)].id
         dosenId = Dosen.dosen[Dosen.find(teacher.nama)].id
+        for c in conflict_list:
+            if dosenId == c[0] and courseId == c[1] and time.id == c[2] and kelasId == c[3] and room.id == c[4]:
+                check = True
         query = text("""
             SELECT id, id_kelas, id_dosen, id_mata_kuliah, id_semester
             FROM pengajaran 
@@ -132,15 +134,15 @@ async def generateJadwalSementara(session: AsyncSession):
         
         query = text("""
             INSERT INTO jadwal_sementara (id_slot, id_ruangan, id_pengajaran, is_conflicted, created_at, updated_at)
-            VALUES (:idSlot, :idRuangan, :idJadwal, b'0', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+            VALUES (:idSlot, :idRuangan, :idJadwal, :check, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
         """)
-        result = await session.execute(query, {"idSlot": time.id, "idRuangan": room.id, "idJadwal": pengajaran.id})
+        result = await session.execute(query, {"idSlot": time.id, "idRuangan": room.id, "idJadwal": pengajaran.id, "check": check})
         await session.commit()
         print(f"Course {course.nama} in Room {room.nama} at {time.start_time}-{time.end_time} on {time.day} by {teacher.nama} for Class {class_.nama}")
     
     print("panjang: ", len(pengajaran_list))
-    
-    return best_violating_preferences, conflict_list
+    print(conflict_list)
+    return best_violating_preferences, conflict_list_message
 
 async def getJadwalSementaraPageable(session: AsyncSession, skip: int = 0, limit: int = 10) -> List[JadwalSementaraModel]:
     result = await session.execute(
@@ -194,7 +196,7 @@ async def generateJadwal(token, session: AsyncSession):
                     "summary": e.pengajaran.kelas.nama_kelas + " - " + e.pengajaran.mata_kuliah.nama_mata_kuliah,
                     "start": {"dateTime": jadwal.start_date_time.astimezone(pytz.utc).isoformat(), "timeZone": "Asia/Jakarta"},
                     "end": {"dateTime": jadwal.end_date_time.astimezone(pytz.utc).isoformat(), "timeZone": "Asia/Jakarta"},
-                    "location": e.ruangan.nama_ruangan,
+                    "location": "ruangan " + e.ruangan.nama_ruangan,
                     "attendees": [{"email": e.pengajaran.dosen.email}]
                 }
                 event = service.events().insert(calendarId="primary", body=event).execute()

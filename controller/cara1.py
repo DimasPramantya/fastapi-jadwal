@@ -48,6 +48,8 @@ dosen = []
 
 dosen_course_class_mapping = {}
 
+conflict_list_message = []
+
 conflict_list = []
 
 def fitness(schedule):
@@ -171,7 +173,8 @@ def enforce_no_class_overlap(schedule):
                 (time.start_time <= existing_time.start_time < time.end_time)
             ):
                 conflict = True
-                conflict_list.append(f"Conflict detected for {class_.nama}: {course.nama} overlaps with {existing_course.nama} on {time.day} at {time.start_time}-{time.end_time}")
+                conflict_list.append([teacher.id, course.id, time.id, class_.id, room.id])
+                conflict_list_message.append(f"Conflict detected for {class_.nama}: {course.nama} overlaps with {existing_course.nama} on {time.day} at {time.start_time}-{time.end_time}")
                 print(f"Conflict detected for {class_.nama}: {course.nama} overlaps with {existing_course.nama} on {time.day} at {time.start_time}-{time.end_time}")
                 break  # No need to check further for this slot
 
@@ -198,13 +201,15 @@ def enforce_no_teacher_overlap(schedule):
         # Check for time conflicts for the teacher
         conflict = False
         for existing_slot in teacher_schedules[teacher.nama]:
-            existing_course, existing_room, existing_time, _, _ = existing_slot
+            existing_course, existing_room, existing_time, _, existing_class = existing_slot
             if existing_time.day == time.day and (
                 (existing_time.start_time <= time.start_time < existing_time.end_time) or
                 (time.start_time <= existing_time.start_time < time.end_time)
             ):
                 conflict = True
-                conflict_list.append(f"Conflict detected for {teacher.nama}: {course.nama} overlaps with {existing_course.nama} on {time.day} at {time.start_time}-{time.end_time}")
+                conflict_list.append([teacher.id, course.id, time.id, class_.id, room.id])
+                conflict_list.append([teacher.id, existing_course.id, existing_time.id, existing_class.id, existing_room.id])
+                conflict_list_message.append(f"Conflict detected for {teacher.nama}: {course.nama} overlaps with {existing_course.nama} on {time.day} at {time.start_time}-{time.end_time}")
                 print(f"Conflict detected for {teacher.nama}: {course.nama} overlaps with {existing_course.nama} on {time.day} at {time.start_time}-{time.end_time}")
                 break
 
@@ -358,6 +363,5 @@ def generate_schedule(_classes, _dosen, _course_classes, _rooms, _schedules, _do
 
     best_score, _ = fitness(best_solution)  # Calculate the score
     print("Best Solution (Score: {}):".format(int(abs(best_score)/100)))
-    class_schedules = {}  # Dictionary to store schedules by class
     
-    return best_solution, best_violating_preferences, conflict_list
+    return best_solution, best_violating_preferences, conflict_list_message, conflict_list
