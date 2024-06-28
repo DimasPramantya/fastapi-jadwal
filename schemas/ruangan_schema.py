@@ -25,6 +25,7 @@ class Ruangan(RuanganBase):
 
 def ruangan_model_to_dict(ruangan: Ruangan):
     return {
+        "id": ruangan.id,
         "nama_ruangan": ruangan.nama_ruangan,
         "nama_gedung": ruangan.nama_gedung,
         "kapasitas": ruangan.kapasitas,

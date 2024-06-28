@@ -43,7 +43,7 @@ async def get_dosen_pageable(
     items_dict = [dosen_model_to_dict(d) for d in dosen_list]
     return Page(total_elements=total, items=items_dict, size=limit, page=skip)
         
-@router.put("{id}", response_model=DosenSchema)
+@router.put("/{id}", response_model=DosenSchema)
 async def update_dosen(
     id: int,
     dosen: UpdateDosen,

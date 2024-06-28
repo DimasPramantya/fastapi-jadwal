@@ -7,7 +7,7 @@ from schemas.pagination_schema import Page
 
 router = APIRouter()
 
-@router.get("{id}", response_model=PreferensiJadwalDosenSchema)
+@router.get("/{id}", response_model=PreferensiJadwalDosenSchema)
 async def get_preferensi_jadwal_dosen_by_id(
     id: int,
     session = Depends(get_async_session)
@@ -29,7 +29,7 @@ async def get_preferensi_jadwal_dosen_pageable(
     preferensiJadwalDosenDict = [preferensi_jadwal_dosen_model_to_dict(d) for d in preferensiJadwalDosenList]
     return Page(total_elements=total, items=preferensiJadwalDosenDict, size=limit, page=skip)
 
-@router.delete("{id}")
+@router.delete("/{id}")
 async def delete_preferensi_jadwal_dosen(
     id: int,
     session = Depends(get_async_session)
@@ -37,7 +37,7 @@ async def delete_preferensi_jadwal_dosen(
     await deletePreferensiJadwalDosen(id, session)
     return {"message": f"Preferensi Jadwal Dosen with id {id} deleted successfully"}
 
-@router.put("{id}", response_model=PreferensiJadwalDosenSchema)
+@router.put("/{id}", response_model=PreferensiJadwalDosenSchema)
 async def update_preferensi_jadwal_dosen(
     id: int,
     preferensiJadwalDosen: PreferensiJadwalDosenUpdate,

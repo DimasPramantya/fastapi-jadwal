@@ -5,7 +5,10 @@ from sqlalchemy import func
 from typing import List
 
 from schemas.dosen_schema import CreateDosen, Dosen as DosenSchema, UpdateDosen
+from schemas.preferensi_jadwal_dosen_schema import PreferensiJadwalDosen as PreferensiJadwalDosenSchema, PreferensiJadwalDosenCreate
 from model.dosen_model import Dosen as DosenModel
+from model.slot_model import Slot as SlotModel
+from model.preferensi_jadwal_dosen_model import PreferensiJadwalDosen as PreferensiJadwalDosenModel
 from exceptions.entity_not_found_exception import EntityNotFoundException
 from exceptions.bad_request_exception import BadRequestException
 
@@ -38,8 +41,7 @@ async def deleteDosen(id: int, session: AsyncSession):
     return True
 
 async def getDosenById(id: int, session: AsyncSession) -> DosenModel:
-    result = await session.execute(select(DosenModel).where(DosenModel.id == id))
-    dosen = result.scalar_one_or_none()
+    dosen = await session.get(DosenModel, id)
     if not dosen:
         raise EntityNotFoundException(entity_name="Dosen", entity_id=id)
     return dosen
@@ -72,9 +74,25 @@ async def updateDosen(id: int, dosen: UpdateDosen, session:AsyncSession) -> Dose
     currentDosen.nidn = dosen.nidn
     currentDosen.nip = dosen.nip
     currentDosen.telp_seluler = dosen.telp_seluler
+    currentDosen.email = dosen.email
     
     session.add(currentDosen)
     await session.commit()
     await session.refresh(currentDosen)
     return currentDosen
 
+async def addPreferensi(preferensi: PreferensiJadwalDosenCreate, session: AsyncSession):
+    dosen = await session.get(DosenModel, preferensi.id_dosen)
+    if not dosen:
+        raise EntityNotFoundException(entity_name="Dosen", entity_id=preferensi.id_dosen)
+    slot = await session.get(SlotModel,  preferensi.id_slot)
+    if not slot:
+        raise EntityNotFoundException(entity_name="Slot", entity_id=preferensi.id_slot)
+    preferensiModel = PreferensiJadwalDosenModel(
+        id_dosen=preferensi.id_dosen,
+        id_slot=preferensi.id_slot
+    )
+    session.add(preferensiModel)
+    await session.commit()
+    await session.refresh(preferensiModel)
+    return preferensiModel

@@ -22,7 +22,7 @@ async def get_semester_pageable(
     semesterDict = [semester_model_to_dict(d) for d in semesterList]
     return Page(total_elements=total, items=semesterDict, size=limit, page=skip)
 
-@router.get("{id}", response_model=SemesterSchema)
+@router.get("/{id}", response_model=SemesterSchema)
 async def get_semester_by_id(
     id: int,
     session = Depends(get_async_session)
@@ -30,7 +30,7 @@ async def get_semester_by_id(
     return await getSemesterById(id, session)
 
 
-@router.put("{id}", response_model=SemesterSchema)
+@router.put("/{id}", response_model=SemesterSchema)
 async def update_semester(
     id: int,
     semester: SemesterUpdate,
@@ -45,7 +45,7 @@ async def create_new_semester(
 ):
     return await createNewSemester(semester, session)
 
-@router.delete("{id}")
+@router.delete("/{id}")
 async def delete_semester(
     id: int,
     session = Depends(get_async_session)

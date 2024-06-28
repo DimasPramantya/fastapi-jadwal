@@ -7,7 +7,7 @@ from schemas.pagination_schema import Page
 
 router = APIRouter()
 
-@router.get("{id}", response_model=PengajaranSchema)
+@router.get("/{id}", response_model=PengajaranSchema)
 async def get_pengajaran_by_id(
     id: int,
     session = Depends(get_async_session)
@@ -29,7 +29,7 @@ async def get_pengajaran_pageable(
     pengajaranDict = [pengajaran_model_to_dict(d) for d in pengajaranList]
     return Page(total_elements=total, items=pengajaranDict, size=limit, page=skip)
 
-@router.delete("{id}")
+@router.delete("/{id}")
 async def delete_pengajaran(
     id: int,
     session = Depends(get_async_session)
@@ -37,7 +37,7 @@ async def delete_pengajaran(
     await deletePengajaran(id, session)
     return {"message": f"Pengajaran with id {id} deleted successfully"}
 
-@router.put("{id}", response_model=PengajaranSchema)
+@router.put("/{id}", response_model=PengajaranSchema)
 async def update_pengajaran(
     id: int,
     pengajaran: PengajaranUpdate,

@@ -10,8 +10,6 @@ class BaseModel(BaseModel):
         from_attributes = True
 
 class DosenBase(BaseModel):
-    __tablename__ = "dosen"
-
     nip: str
     nidn: str
     id_pegawai: str
@@ -26,16 +24,16 @@ class DosenBase(BaseModel):
     email: Optional[str]
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
-    preferensi: List[PreferensiJadwalDosen] = []
     
 class CreateDosen(DosenBase):
-    pass
+    preferensi: List[PreferensiJadwalDosen] = []
 
 class UpdateDosen(DosenBase):
     pass
 
 class Dosen(DosenBase):
     id: int
+    preferensi: List[PreferensiJadwalDosen] = []
     
     class Config:
         orm_mode = True

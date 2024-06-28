@@ -15,7 +15,8 @@ from exceptions.entity_not_found_exception import EntityNotFoundException
 from exceptions.bad_request_exception import BadRequestException
 from .cara1 import generate_schedule
 from datetime import date, timedelta, datetime
-from schemas.jadwal_sementara_schema import jadwal_sementara_to_dict
+from schemas.jadwal_sementara_schema import jadwal_sementara_to_dict, JadwalSementaraUpdate, JadwalSementaraCreate
+from itertools import product
 
 from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -32,6 +33,9 @@ from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import pytz
+
+from schemas.ruangan_schema import ruangan_model_to_dict
+from schemas.slot_schema import slot_model_to_dict
 
 from dotenv import load_dotenv
 
@@ -240,3 +244,52 @@ def verify_token(token):
         return None
     except jwt.InvalidTokenError:
         return None
+    
+async def checkJadwalKosong(sessionL: AsyncSession):
+    slots_query = select(SlotModel)
+    slots_result = await sessionL.execute(slots_query)
+    slots = slots_result.scalars().all()
+
+    rooms_query = select(RuanganModel)
+    rooms_result = await sessionL.execute(rooms_query)
+    rooms = rooms_result.scalars().all()
+
+    all_combinations = list(product(slots, rooms))
+
+    used_combinations_query = select(JadwalSementaraModel.id_slot, JadwalSementaraModel.id_ruangan)
+    used_combinations_result = await sessionL.execute(used_combinations_query)
+    used_combinations = used_combinations_result.all()
+
+    used_combinations_set = set((combination.id_slot, combination.id_ruangan) for combination in used_combinations)
+
+    empty_combinations = [(slot, room) for slot, room in all_combinations if (slot.id, room.id) not in used_combinations_set]
+    empty_combinations_dict = [
+        {
+            "slot": slot_model_to_dict(slot),
+            "room": ruangan_model_to_dict(room)
+        }
+        for slot, room in empty_combinations
+    ]
+
+    return empty_combinations_dict
+
+async def updateJadwalSementara(id: int, jadwalSementara: JadwalSementaraUpdate, session: AsyncSession):
+    currentJadwalSementara = await session.get(JadwalSementaraModel, id)
+    currentJadwalSementara.updated_at = datetime.now()
+    currentJadwalSementara.id_slot = jadwalSementara.id_slot
+    currentJadwalSementara.id_ruangan = jadwalSementara.id_ruangan
+    currentJadwalSementara.is_conflicted = False
+    session.add(currentJadwalSementara)
+    await session.commit()
+    await session.refresh(currentJadwalSementara) 
+    return jadwal_sementara_to_dict(currentJadwalSementara)
+
+async def addJadwalSementara(jadwalSementara: JadwalSementaraCreate, session: AsyncSession):
+    query = text("""
+        INSERT INTO jadwal_sementara (id_slot, id_ruangan, id_pengajaran, is_conflicted, created_at, updated_at)
+        VALUES (:idSlot, :idRuangan, :idJadwal, :check, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    """)
+    result = await session.execute(query, {"idSlot": jadwalSementara.id_slot, "idRuangan": jadwalSementara.id_ruangan, "idJadwal": jadwalSementara.id_pengajaran, "check": jadwalSementara.is_conflicted or False})
+    await session.commit()
+    jadwal = await session.get(JadwalSementaraModel, result.lastrowid)
+    return jadwal_sementara_to_dict(jadwal)

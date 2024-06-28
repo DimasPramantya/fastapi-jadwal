@@ -7,14 +7,14 @@ from controller.slot_controller import *
 
 router = APIRouter()
 
-@router.get("{id}", response_model=SlotSchema)
+@router.get("/{id}", response_model=SlotSchema)
 async def get_slot_by_id(
     id: int,
     session = Depends(get_async_session)
 )->SlotSchema:
     return await getSlotById(id, session)
 
-@router.put("{id}", response_model=SlotSchema)
+@router.put("/{id}", response_model=SlotSchema)
 async def update_slot(
     id: int,
     slot: SlotUpdate,
@@ -22,7 +22,7 @@ async def update_slot(
 )->SlotSchema:
     return await updateSlot(id, slot, session)
 
-@router.delete("{id}")
+@router.delete("/{id}")
 async def delete_slot(
     id: int,
     session = Depends(get_async_session)

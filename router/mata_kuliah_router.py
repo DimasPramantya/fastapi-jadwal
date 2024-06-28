@@ -14,7 +14,7 @@ async def add_mata_kuliah(
 ):
     return await createMataKuliah(mataKuliah, session)
 
-@router.get("{id}", response_model=MataKuliahSchema)
+@router.get("/{id}", response_model=MataKuliahSchema)
 async def find_mata_kuliah_by_id(
     id: int,
     session: AsyncSession = Depends(get_async_session)
@@ -36,7 +36,7 @@ async def get_mata_kuliah_pageable(
     mataKuliahDict = [mata_kuliah_model_to_dict(d) for d in mataKuliahList]
     return Page(total_elements=total, items=mataKuliahDict, size=limit, page=skip)
 
-@router.delete("{id}")
+@router.delete("/{id}")
 async def delete_mata_kuliah(
     id: int,
     session = Depends(get_async_session)
@@ -44,7 +44,7 @@ async def delete_mata_kuliah(
     await deleteMataKuliah(id, session)
     return {"message": f"Mata Kuliah with id {id} deleted successfully"}
 
-@router.put("{id}")
+@router.put("/{id}")
 async def update_mata_kuliah(
     id: int,
     session = Depends(get_async_session)

@@ -22,14 +22,14 @@ async def get_ruangan_pageable(
     ruanganDict = [ruangan_model_to_dict(d) for d in ruanganList]
     return Page(total_elements=total, items=ruanganDict, size=limit, page=skip)
 
-@router.get("{id}", response_model=RuanganSchema)
+@router.get("/{id}", response_model=RuanganSchema)
 async def get_ruangan_by_id(
     id: int,
     session = Depends(get_async_session)
 ):
     return await getRuanganById(id, session)
 
-@router.put("{id}", response_model=RuanganSchema)
+@router.put("/{id}", response_model=RuanganSchema)
 async def edit_ruangan(
     id: int,
     ruangan: RuanganUpdate,
@@ -37,7 +37,7 @@ async def edit_ruangan(
 ):
     return await updateRuangan(id, ruangan, session)
 
-@router.delete("{id}")
+@router.delete("/{id}")
 async def delete_ruangan(
     id: int,
     session = Depends(get_async_session)

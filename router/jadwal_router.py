@@ -41,3 +41,24 @@ async def generate_all_jadwal(
 ):
     await generateJadwal(credentials.credentials, session)
     return
+
+@router.get("/empty")
+async def get_jadwal_empty(
+    session = Depends(get_async_session)
+):
+    return await checkJadwalKosong(session)
+    
+@router.put("/temp/{id}")
+async def update_jadwal_sementara(
+    id: int,
+    jadwal: JadwalSementaraUpdate,
+    session = Depends(get_async_session)
+):
+    return await updateJadwalSementara(id, jadwal, session)
+
+@router.post("/new-temp")
+async def add_new_jadwal_sementara(
+    jadwal: JadwalSementaraCreate,
+    session = Depends(get_async_session)
+):
+    return await addJadwalSementara(jadwal, session)

@@ -14,7 +14,7 @@ async def create_new_kelas(kelas: KelasCreate, session: AsyncSession = Depends(g
         raise BadRequestException()
     return newKelas
 
-@router.get("{id}", response_model=KelasSchema)
+@router.get("/{id}", response_model=KelasSchema)
 async def find_kelas_by_id(id: int, session: AsyncSession = Depends(get_async_session)):
     kelas = await getKelasById(id, session)
     return kelas
